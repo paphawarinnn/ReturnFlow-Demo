@@ -1,0 +1,10 @@
+{
+  "description": "Helps web developers plan the pages and files needed for a real website, beyond a single HTML file with multiple code views.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

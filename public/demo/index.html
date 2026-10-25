@@ -1,0 +1,372 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>ReturnFlow DEMO</title>
+<style>
+:root{--red:#C62828;--deep:#8E1B1B;--yel:#FFC928;--cream:#FFF8E7;--bg:#fff;--card:#fff;--tx:#252525;--mu:#6B7280;--bd:#E5E7EB;--ok:#15803d;--warn:#b45309;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1414;--card:#241b1b;--cream:#2a2118;--tx:#f3ecec;--mu:#b5a9a9;--bd:#3a2e2e;--ok:#4ade80;--warn:#fbbf24;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1414;--card:#241b1b;--cream:#2a2118;--tx:#f3ecec;--mu:#b5a9a9;--bd:#3a2e2e;--ok:#4ade80;--warn:#fbbf24;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Thai","Leelawadee UI",system-ui,sans-serif}
+.demo{background:var(--yel);color:#252525;text-align:center;font-weight:700;font-size:13px;padding:6px 10px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--deep);color:#fff;padding:12px 18px}
+.logo{font-weight:800;font-size:18px}.logo b{background:var(--yel);color:#252525;border-radius:8px;padding:1px 8px;margin-right:8px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+button,select,input,textarea{font:inherit;color:inherit}
+.tab{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:10px;padding:7px 14px;cursor:pointer}
+.tab.on{background:var(--yel);color:#252525;border-color:var(--yel);font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:18px}
+.grid{display:grid;gap:14px}.k{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:0 4px 14px rgba(142,27,27,.06)}
+.kpi{border-top:4px solid var(--red)}.kpi.y{border-top-color:var(--yel)}.kpi p{margin:0;color:var(--mu);font-size:13px}.kpi h3{margin:6px 0 2px;font-size:28px}.kpi small{color:var(--mu);font-size:11px}
+h2{margin:0 0 10px;font-size:18px}h4{margin:0 0 8px}
+.btn{background:var(--red);color:#fff;border:0;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600}.btn:hover{background:var(--deep)}
+.btn.s{background:var(--card);color:var(--red);border:1px solid var(--red)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-weight:600}
+.b{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+.st-submitted,.st-under-review,.st-need-more-information{background:#FEF3C7;color:#92400e}.st-approved,.st-completed,.st-refunded{background:#DCFCE7;color:#166534}.st-rejected{background:#FEE2E2;color:#991b1b}.st-cancelled{background:#E5E7EB;color:#374151}
+label{display:block;font-size:13px;color:var(--mu);margin:10px 0 3px}input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+.err{color:var(--red);font-size:13px;margin-top:6px}.ok{color:var(--ok);font-size:13px;margin-top:6px}
+.note{background:var(--cream);border:1px dashed var(--yel);border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+.tl{margin:8px 0 0;padding-left:18px;color:var(--mu);font-size:13px}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}.bar i{display:block;height:14px;border-radius:6px;background:var(--red)}.bar i.y{background:var(--yel)}
+.empty{text-align:center;color:var(--mu);padding:22px}
+dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);max-width:420px;width:92%}
+
+#anx .g{display:grid;gap:14px}
+#anx .fl{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;background:var(--cream);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:14px}
+#anx .fl label{margin:0 0 2px;font-size:12px}#anx select{width:auto;min-width:150px}
+#anx .k{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}#anx .two{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));margin-top:14px}
+#anx .kpi small{color:var(--mu);font-size:12px}#anx h2{margin:0 0 4px}#anx .sub{margin:0 0 12px;color:var(--mu);font-size:13px}
+#anx .row{display:grid;grid-template-columns:140px 1fr 120px;gap:8px;align-items:center;width:100%;background:none;border:0;border-radius:8px;padding:5px 4px;text-align:left;cursor:pointer;color:inherit}
+#anx .row:hover,#anx .row.on{background:var(--cream)}
+#anx .tr{height:16px;background:var(--bd);border-radius:6px;overflow:hidden}#anx .tr i{display:block;height:100%;background:var(--red);border-radius:6px}
+#anx .row span:last-child{font-size:13px;color:var(--mu);text-align:right}
+#anx td.n,#anx th.n{text-align:right}#anx tbody tr{cursor:pointer}#anx tbody tr:hover,#anx tbody tr.on{background:var(--cream)}
+#anx .leg{display:flex;flex-direction:column;gap:6px;font-size:14px}#anx .leg div{display:flex;align-items:center;gap:8px}#anx .sw{width:12px;height:12px;border-radius:3px;flex:none}
+#anx .don{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center}
+#anx svg text{fill:var(--mu);font:11px system-ui,sans-serif}
+#anx .act{margin:0;padding:0;list-style:none;display:grid;gap:10px}#anx .act li{border-left:4px solid var(--yel);background:var(--cream);border-radius:8px;padding:10px 12px;font-size:14px}#anx .act li.hot{border-left-color:var(--red)}#anx .act b{display:block}
+#anx .empty{text-align:center;color:var(--mu);padding:30px}#anx .note{margin-top:14px;font-size:12px;color:var(--mu);background:none;border:0;padding:0}
+#tip{position:fixed;z-index:60;pointer-events:none;background:#252525;color:#fff;font-size:13px;line-height:1.4;padding:6px 10px;border-radius:8px;max-width:240px;display:none}
+#anx svg [data-tip],#anx .row[data-tip]{cursor:pointer}
+:root{--c3:#5B1A1A;--c4:#9CA3AF}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--c3:#d9a0a0;--c4:#8b8484}}:root[data-theme="dark"]{--c3:#d9a0a0;--c4:#8b8484}
+@media(max-width:560px){#anx .row{grid-template-columns:104px 1fr 92px}#anx .row span:last-child{font-size:12px;white-space:nowrap}}
+
+.stp{display:flex;gap:0;margin:4px 0 14px;padding:0;list-style:none;counter-reset:s}
+.stp li{flex:1;text-align:center;font-size:12px;color:var(--mu);position:relative;padding-top:30px}
+.stp li:before{counter-increment:s;content:counter(s);position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:var(--bd);color:var(--mu);font-weight:700;line-height:24px;font-size:12px;z-index:1}
+.stp li:after{content:"";position:absolute;top:11px;left:-50%;width:100%;height:2px;background:var(--bd)}
+.stp li:first-child:after{display:none}
+.stp li.done{color:var(--tx)}.stp li.done:before{background:var(--ok);color:#fff;content:"✓"}.stp li.done:after,.stp li.cur:after{background:var(--ok)}
+.stp li.cur{color:var(--tx);font-weight:700}.stp li.cur:before{background:var(--red);color:#fff;box-shadow:0 0 0 4px rgba(198,40,40,.18)}
+.stp li.bad:before{background:#991b1b;color:#fff;content:"✕"}.stp li.bad{color:#991b1b;font-weight:700}
+.nx{border:2px solid var(--yel);background:var(--cream);border-radius:14px;padding:14px;margin:6px 0 14px}
+.nx h4{margin:0 0 4px;font-size:16px}.nx p{margin:0 0 10px;color:var(--mu);font-size:13px}
+.nx .acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.nx .btn.big{padding:10px 18px;font-size:15px}
+.nx .lnk{background:none;border:0;color:var(--mu);text-decoration:underline;cursor:pointer;font-size:13px;padding:6px 4px}
+.nx .lnk:hover{color:var(--red)}
+.nx.done{border-color:var(--ok);background:transparent}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 0 12px}
+.kv div{background:var(--cream);border-radius:10px;padding:8px 10px;font-size:13px}.kv span{display:block;color:var(--mu);font-size:11px}.kv b{font-size:14px}
+.rfs{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap}.rfs span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--bd);color:var(--mu)}.rfs span.on{background:var(--red);color:#fff;font-weight:700}.rfs span.ok{background:var(--ok);color:#fff}
+@media(max-width:560px){.stp li{font-size:10px}}
+.tbn{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px dashed var(--bd);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13px}.tbn small{color:var(--mu)}.tbn.on{border-color:var(--yel);background:var(--cream)}
+
+/* ---- dashboard: ชีวิตชีวา ---- */
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes dr{from{stroke-dasharray:0 var(--c)}}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes pulse{0%{r:5;opacity:1}70%{r:13;opacity:0}100%{r:13;opacity:0}}
+@keyframes shine{0%{background-position:0 0}100%{background-position:200% 0}}
+#anx .card{animation:up .55s cubic-bezier(.2,.7,.2,1) both;transition:transform .2s,box-shadow .2s}
+#anx .g.k .card:nth-child(2){animation-delay:.07s}#anx .g.k .card:nth-child(3){animation-delay:.14s}#anx .g.k .card:nth-child(4){animation-delay:.21s}
+#anx .g.two .card{animation-delay:.25s}
+#anx .card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(142,27,27,.16)}
+#anx .hero{position:relative;overflow:hidden;color:#fff;border-radius:20px;padding:22px 24px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;
+ background:linear-gradient(120deg,#8E1B1B,#C62828 55%,#E8590C);animation:up .5s both}
+#anx .hero:before,#anx .hero:after{content:"";position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,201,40,.55),rgba(255,201,40,0) 70%);pointer-events:none}
+#anx .hero:before{width:260px;height:260px;right:-60px;top:-120px}#anx .hero:after{width:180px;height:180px;left:30%;bottom:-110px;opacity:.6}
+#anx .hero>*{position:relative;z-index:1}
+#anx .hero h1{margin:0 0 4px;font-size:24px;line-height:1.25}#anx .hero p{margin:0;opacity:.92;font-size:14px;max-width:560px}
+#anx .hero .pl{display:inline-block;background:rgba(255,255,255,.18);border-radius:999px;padding:2px 12px;font-size:12px;margin-bottom:8px}
+#anx .hero .big{text-align:center;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:10px 22px}
+#anx .hero .big b{display:block;font-size:40px;line-height:1.1;color:var(--yel);font-variant-numeric:tabular-nums}#anx .hero .big span{font-size:12px;opacity:.9}
+#anx .kpi{position:relative;overflow:hidden}
+#anx .kpi .ic{position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:linear-gradient(135deg,#FDE2E2,#FFF1C2)}
+#anx .kpi h3{font-variant-numeric:tabular-nums}
+#anx .spk{width:100%;height:26px;margin-top:6px;display:block}#anx .spk polyline{fill:none;stroke:var(--red);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-dasharray:1;animation:draw 1.2s .3s ease-out both}
+#anx .row{transition:background .15s,transform .15s}#anx .row:hover{transform:translateX(4px)}
+#anx .tr i{transform-origin:left;background:linear-gradient(90deg,var(--red),#ef5350);animation:grow .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*90ms + .3s)}
+#anx .row.top .tr i{background:linear-gradient(90deg,var(--red),var(--yel))}
+#anx .rk{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--yel);color:#252525;font-size:11px;font-weight:800;text-align:center;line-height:20px;margin-right:6px}
+#anx circle[data-tip]{transition:stroke-width .15s}#anx svg circle[stroke-width="26"]{animation:dr 1s ease-out both}#anx svg circle[stroke-width="26"]:hover{stroke-width:31}
+#anx .ln{stroke-dasharray:1;animation:draw 1.4s .2s ease-out both}#anx .ar{animation:fade 1.2s .6s both}#anx .gl{animation:fade .8s .8s both}
+#anx .pk{animation:pulse 1.8s 1.4s infinite;fill:var(--yel);stroke:var(--red);stroke-width:2;transform-box:fill-box}
+#anx svg circle[fill="transparent"]:hover{fill:rgba(198,40,40,.22)}
+#anx .act li{transition:transform .15s,box-shadow .15s}#anx .act li:hover{transform:translateX(4px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+#anx tbody tr{transition:background .15s}
+#anx .b{transition:transform .15s}#anx tr:hover .b{transform:scale(1.08)}
+@media(prefers-reduced-motion:reduce){#anx *,#anx *:before,#anx *:after{animation:none!important;transition:none!important}}
+@media(max-width:560px){#anx .hero h1{font-size:20px}#anx .hero .big b{font-size:32px}}
+</style></head><body>
+<div class="demo">DEMO / SAMPLE DATA — ข้อมูลจาก CSV ตัวอย่างที่แนบมา (สังเคราะห์) ไม่ใช่ธุรกรรมจริง · ไม่ได้เชื่อมระบบชำระเงิน ขนส่ง หรืออีเมลจริง</div>
+<header><div class="logo"><b>R</b>ReturnFlow</div><div class="tabs" id="tabs"></div></header>
+<main id="app"></main>
+<dialog id="dlg"><form method="dialog" id="dform"><h4 id="dt"></h4><label for="dr">เหตุผล / ข้อความถึงลูกค้า (จำเป็น)</label><textarea id="dr" rows="3"></textarea><div class="err" id="de"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button class="btn s" type="button" id="dc">ยกเลิก</button><button class="btn" type="button" id="dok">ยืนยัน</button></div></form></dialog>
+<dialog id="ex"><h4>ส่งออกไฟล์ Excel (.csv)</h4><p style="font-size:13px;margin:0 0 10px">ไฟล์นี้เปิดด้วย Excel ได้ทันที ภาษาไทยไม่เพี้ยน ตามตัวกรองปัจจุบัน (<span id="xn">0</span> รายการ)</p><button class="btn" id="xd" type="button">⬇ ดาวน์โหลดไฟล์ .csv</button>
+<details style="margin-top:12px"><summary style="cursor:pointer;font-size:13px;color:var(--mu)">ดาวน์โหลดไม่ได้? คัดลอกข้อความไปวางใน Excel แทน</summary><textarea id="xt" rows="6" readonly aria-label="CSV" style="margin-top:8px"></textarea><button class="btn s" id="xc" type="button" style="margin-top:6px">คัดลอก</button></details>
+<p style="font-size:12px;color:var(--mu)">เซลล์ที่ขึ้นต้นด้วย = + - @ ถูกป้องกัน Formula Injection แล้ว</p><button class="btn s" onclick="document.getElementById('ex').close()">ปิด</button></dialog><div id="tz" role="status" aria-live="polite" style="display:none;position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);color:#fff;padding:10px 16px;border-radius:12px;z-index:50;max-width:90%;font-size:14px"></div>
+<div id="tip" role="tooltip"></div>
+<script>
+const D={"open": [{"orderId": "ORD00000002", "orderDate": "2023-05-06", "productCategory": "Toys", "productPrice": 390.03, "orderQuantity": 5}, {"orderId": "ORD00000003", "orderDate": "2024-08-29", "productCategory": "Toys", "productPrice": 401.09, "orderQuantity": 3}, {"orderId": "ORD00000004", "orderDate": "2023-01-16", "productCategory": "Books", "productPrice": 110.09, "orderQuantity": 4}, {"orderId": "ORD00000010", "orderDate": "2024-05-26", "productCategory": "Toys", "productPrice": 119.0, "orderQuantity": 2}, {"orderId": "ORD00000011", "orderDate": "2024-02-08", "productCategory": "Home", "productPrice": 480.48, "orderQuantity": 4}, {"orderId": "ORD00000012", "orderDate": "2024-06-07", "productCategory": "Toys", "productPrice": 216.41, "orderQuantity": 3}, {"orderId": "ORD00000013", "orderDate": "2023-07-22", "productCategory": "Electronics", "productPrice": 198.78, "orderQuantity": 2}, {"orderId": "ORD00000014", "orderDate": "2024-09-01", "productCategory": "Electronics", "productPrice": 146.37, "orderQuantity": 4}]};
+const T={submitted:['under-review','cancelled'],'under-review':['need-more-information','approved','rejected'],'need-more-information':['under-review','cancelled'],approved:['completed'],rejected:[],completed:[],cancelled:[]};
+const L={submitted:'ส่งคำขอแล้ว','under-review':'รอตรวจสอบ','need-more-information':'รอข้อมูลเพิ่ม',approved:'อนุมัติ',rejected:'ปฏิเสธ',completed:'เสร็จสิ้น',cancelled:'ยกเลิก'};
+const TY={return:'คืนสินค้า',claim:'เคลมสินค้า',exchange:'เปลี่ยนสินค้า'};
+const f=n=>n.toLocaleString('th-TH'),m2=n=>'$'+n.toLocaleString('en-US',{maximumFractionDigits:0});
+const pct=(a,b)=>b>0?(a/b*100).toFixed(1)+'%':'N/A';
+let S={view:'ana',req:[],n:1};
+try{const x=JSON.parse(localStorage.getItem('rf')||'null');if(x)S=Object.assign(S,x)}catch(e){}
+const save=()=>{try{localStorage.setItem('rf',JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const badge=s=>`<span class="b st-${s}">${L[s]||s}</span>`;
+const hist=(r,to,note)=>{r.h.push({t:now(),from:r.status,to,by:S.view==='cust'?'ลูกค้า (demo)':'เจ้าหน้าที่ (demo)',note});r.status=to};
+S.notif=S.notif||[];S.sel=S.sel||null;S.f=S.f||{q:'',st:'',ty:''};S.fk=S.fk||('k'+Date.now());
+const MTH=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],p2=n=>String(n).padStart(2,'0');
+// รูปแบบวันที่เดียวทั้งระบบ: "25 ต.ค. 2569" และมีเวลา "25 ต.ค. 2569 13:33" (พ.ศ., เวลาท้องถิ่น)
+const fd=s=>{if(!s)return '';s=String(s);let m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s);if(m)return `${+m[3]} ${MTH[m[2]-1]} ${+m[1]+543}`;
+  if(/^\d{4}-\d\d-\d\dT/.test(s)){const d=new Date(s);if(!isNaN(d))return `${d.getDate()} ${MTH[d.getMonth()]} ${d.getFullYear()+543} ${p2(d.getHours())}:${p2(d.getMinutes())}`}
+  m=/^(\d+)\/(\d+)\/(\d{4}) (\d+:\d\d)/.exec(s);if(m)return `${+m[1]} ${MTH[m[2]-1]} ${m[3]} ${p2(m[4].split(':')[0])}:${m[4].split(':')[1]}`;return s};
+const now=()=>new Date().toISOString();
+const find=no=>S.req.find(x=>x.no===no);
+const ord=id=>D.open.find(o=>o.orderId===id);
+const used=(id)=>S.req.filter(r=>r.order===id&&!['rejected','cancelled'].includes(r.status)).reduce((a,r)=>a+r.qty,0);
+const orders=()=>D.open.map(o=>({...o,used:used(o.orderId),left:o.orderQuantity-used(o.orderId)}));
+const CLOSED=['completed','rejected','cancelled'],REAS=['Changed mind','Defective','Not as described','Wrong item'];
+const CTHG={'Books':'หนังสือ','Clothing':'เสื้อผ้า','Electronics':'อิเล็กทรอนิกส์','Home':'ของใช้ในบ้าน','Toys':'ของเล่น'};
+const RTHG={'Defective':'สินค้าชำรุด','Wrong item':'ได้รับสินค้าผิดรายการ','Changed mind':'เปลี่ยนใจ','Not as described':'ไม่ตรงตามรายละเอียด'},rl=k=>RTHG[k]||k;
+const RT={none:['pending'],pending:['processing','cancelled'],processing:['succeeded','failed'],failed:['processing','cancelled'],succeeded:[],cancelled:['pending']};
+const RL={pending:'รอดำเนินการ',processing:'กำลังดำเนินการ',succeeded:'สำเร็จ',failed:'ล้มเหลว',cancelled:'ยกเลิก'};
+const note=(r,x)=>S.notif.unshift({t:now(),no:r.no,x,read:false});
+// ---- "backend" layer: ทุกกฎตรวจที่นี่ ไม่พึ่งการซ่อนปุ่มในหน้าจอ
+const api={
+ create(p){const o=ord(p.order);if(!o)return{err:'ไม่พบคำสั่งซื้อ'};
+  if(!TY[p.type])return{err:'ประเภทคำขอไม่ถูกต้อง'};if(!REAS.includes(p.reason))return{err:'เหตุผลไม่ถูกต้อง'};
+  const q=Number(p.qty);if(!Number.isInteger(q)||q<1)return{err:'จำนวนต้องเป็นจำนวนเต็มตั้งแต่ 1'};
+  const left=o.orderQuantity-used(o.orderId);
+  if(q>left)return{err:`เกินสิทธิ์: ซื้อ ${o.orderQuantity} ชิ้น ใช้สิทธิ์ไปแล้ว ${o.orderQuantity-left} เหลือ ${left} ชิ้น`};
+  if((p.details||'').length>500)return{err:'รายละเอียดยาวเกิน 500 ตัวอักษร'};
+  const dup=S.req.find(r=>r.key===p.key);if(dup)return{err:'คำขอนี้ถูกส่งแล้ว ('+dup.no+') ไม่สร้างซ้ำ'};
+  const no='RC-DEMO-'+String(S.n++).padStart(4,'0');
+  const r={no,key:p.key,type:p.type,order:o.orderId,qty:q,reason:p.reason,details:p.details||'',status:'submitted',h:[{t:now(),to:'submitted',by:'ลูกค้า (demo)',note:''}],msgs:[],created:(d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate()))(new Date())};
+  S.req.push(r);S.fk='k'+Date.now()+S.n;return{ok:1,r}},
+ move(no,to,txt,appr,who){const r=find(no);if(!r)return{err:'ไม่พบคำขอ'};
+  if(!T[r.status].includes(to))return{err:`เปลี่ยนจาก "${L[r.status]}" เป็น "${L[to]}" ไม่ได้`};
+  if(who==='c'&&!(to==='cancelled'||(r.status==='need-more-information'&&to==='under-review')))return{err:'ลูกค้าไม่มีสิทธิ์เปลี่ยนสถานะนี้'};
+  if((['rejected','need-more-information'].includes(to)||(who==='c'&&to==='under-review'))&&(txt||'').trim().length<3)return{err:'ต้องระบุเหตุผล/ข้อมูลอย่างน้อย 3 ตัวอักษร'};
+  if(to==='approved'){const a=Number(appr);if(!Number.isInteger(a)||a<1||a>r.qty)return{err:`จำนวนที่อนุมัติต้องเป็น 1–${r.qty}`};r.appr=a}
+  if(to==='completed'){if(r.type==='return'&&r.refund?.st!=='succeeded')return{err:'ปิดเคสไม่ได้: ต้องบันทึกคืนเงินสำเร็จ (พร้อมเลขอ้างอิง) ก่อน'};
+   if(r.type!=='return'&&!r.track)return{err:'ปิดเคสไม่ได้: ต้องบันทึกเลขพัสดุสินค้าทดแทน/ซ่อมก่อน'}}
+  r.h.push({t:now(),from:r.status,to,by:who==='c'?'ลูกค้า (demo)':'เจ้าหน้าที่ (demo)',note:(txt||'').trim()});r.status=to;
+  if(who!=='c')note(r,`คำขอ ${r.no}: ${L[to]}`+(txt?' — '+txt.trim():''));return{ok:1}},
+ refund(no,st,ref){const r=find(no);if(!r||r.status!=='approved'||r.type!=='return')return{err:'บันทึกคืนเงินได้เฉพาะคำขอ "คืนสินค้า" ที่อนุมัติแล้ว'};
+  const cur=r.refund,from=cur?cur.st:'none';if(!RT[from].includes(st))return{err:`เปลี่ยนสถานะคืนเงินจาก ${RL[from]||'ยังไม่มี'} เป็น ${RL[st]} ไม่ได้`};
+  if(st==='succeeded'&&!(ref||'').trim())return{err:'ต้องกรอกเลขอ้างอิงที่เจ้าหน้าที่ยืนยันแล้วจึงตั้งเป็นสำเร็จ'};
+  const o=ord(r.order);r.refund=cur||{amt:+(o.productPrice*r.appr).toFixed(2),log:[]};r.refund.st=st;if((ref||'').trim())r.refund.ref=ref.trim().slice(0,60);
+  r.refund.log.push(now()+' → '+RL[st]);note(r,`คำขอ ${r.no}: สถานะคืนเงิน ${RL[st]}`);return{ok:1}},
+ track(no,c,n){const r=find(no);if(!r||r.status!=='approved'||r.type==='return')return{err:'บันทึกพัสดุได้เฉพาะเคลม/เปลี่ยนสินค้าที่อนุมัติแล้ว'};
+  if(!(c||'').trim()||!(n||'').trim())return{err:'ต้องกรอกขนส่งและเลขพัสดุ'};r.track={c:c.trim().slice(0,40),n:n.trim().slice(0,40),t:now()};note(r,`คำขอ ${r.no}: บันทึกเลขพัสดุ ${r.track.n}`);return{ok:1}},
+ msg(no,who,x){const r=find(no);if(!r)return{err:'ไม่พบคำขอ'};x=(x||'').trim();if(!x||x.length>500)return{err:'ข้อความต้องยาว 1–500 ตัวอักษร'};
+  if(who==='c'&&CLOSED.includes(r.status))return{err:'คำขอปิดแล้ว ส่งข้อความไม่ได้'};r.msgs.push({t:now(),who,x});if(who==='s')note(r,`ข้อความใหม่ใน ${r.no}`);return{ok:1}}
+};
+const toast=(m,ok)=>{const e=document.getElementById('tz');e.textContent=m;e.style.background=ok?'var(--ok)':'var(--red)';e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',3500)};
+const run=(res,okMsg)=>{if(res.err){toast(res.err,0);return false}save();render();if(okMsg)toast(okMsg,1);return true};
+const rbadge=r=>r.refund?`<span class="b st-${r.refund.st==='succeeded'?'completed':r.refund.st==='failed'?'rejected':'submitted'}">คืนเงิน: ${RL[r.refund.st]}</span>`:'';
+function render(){
+ const un=S.notif.filter(n=>!n.read).length;
+ document.getElementById('tabs').innerHTML=[['cust','ลูกค้า (Customer)'+(un?' 🔔'+un:'')],['merch','ร้านค้า (Merchant)'],['ana','แดชบอร์ดวิเคราะห์']].map(([k,t])=>`<button class="tab ${S.view===k?'on':''}" data-v="${k}">${t}</button>`).join('');
+ document.getElementById('app').innerHTML=S.view==='cust'?cust():S.view==='merch'?merch():ana();bind();syncQ();if(S.view==='ana')AN.mount()}
+const msgs=(r,staff)=>`<div style="margin:6px 0">${r.msgs.filter(m=>staff||m.who!=='i').map(m=>`<div style="font-size:13px;margin:3px 0;${m.who==='i'?'background:var(--cream);border-left:3px solid var(--yel);padding:3px 8px':''}"><b>${m.who==='c'?'ลูกค้า':m.who==='s'?'ร้านค้า':'บันทึกภายใน (ลูกค้าไม่เห็น)'}</b> <span style="color:var(--mu)">${fd(m.t)}</span><br>${esc(m.x)}</div>`).join('')||'<span style="color:var(--mu);font-size:13px">ยังไม่มีข้อความ</span>'}</div>`;
+function cust(){
+ const o=orders(),mine=S.req,un=S.notif.filter(n=>!n.read).length;
+ return `<div class="note"><b>ส่วนของลูกค้า:</b> คำสั่งซื้อ ${D.open.length} รายการมาจาก orders_clean.csv (ที่ยังไม่มีการคืน) คำขอเก็บในเบราว์เซอร์นี้เท่านั้น ไม่ใช่ฐานข้อมูลจริง ข้อความไม่ใช่ Live Chat (ต้องสลับหน้า/รีเฟรช)</div>
+ <div class="grid k"><div class="card kpi"><p>คำขอของฉัน</p><h3>${mine.length}</h3></div><div class="card kpi y"><p>รอดำเนินการ</p><h3>${mine.filter(r=>!CLOSED.includes(r.status)&&r.status!=='approved').length}</h3></div><div class="card kpi"><p>กำลังดำเนินการหลังอนุมัติ</p><h3>${mine.filter(r=>r.status==='approved').length}</h3></div><div class="card kpi y"><p>ปิดเคสแล้ว</p><h3>${mine.filter(r=>CLOSED.includes(r.status)).length}</h3></div></div>
+ <div class="grid two" style="margin-top:14px"><div class="card"><h2>คำสั่งซื้อของฉัน</h2><div class="tw"><table><tr><th>เลขที่</th><th>วันที่</th><th>หมวด</th><th>ราคา/ชิ้น</th><th>ซื้อ</th><th>ใช้สิทธิ์แล้ว</th><th>เหลือสิทธิ์</th></tr>${o.map(x=>`<tr><td>${x.orderId}</td><td>${fd(x.orderDate)}</td><td>${x.productCategory}</td><td>${m2(x.productPrice)}</td><td>${x.orderQuantity}</td><td>${x.used}</td><td><b>${x.left}</b></td></tr>`).join('')}</table></div></div>
+ <div class="card"><h2>ยื่นคำขอใหม่</h2><label for="fo">คำสั่งซื้อ</label><select id="fo">${o.map(x=>`<option value="${x.orderId}" ${S.lastOrd===x.orderId?'selected':''}>${x.orderId} (เหลือสิทธิ์ ${x.left}/${x.orderQuantity})</option>`).join('')}</select>
+ <label for="ft">ประเภท</label><select id="ft"><option value="return">คืนสินค้า</option><option value="claim">เคลมสินค้า</option><option value="exchange">เปลี่ยนสินค้า</option></select>
+ <label for="fq">จำนวน <span id="fh" style="font-weight:700"></span></label><input id="fq" type="number" min="1" value="1" inputmode="numeric"><label for="fr">เหตุผล</label><select id="fr">${REAS.map(x=>`<option value="${x}">${rl(x)}</option>`).join('')}</select>
+ <label for="fd">รายละเอียด (ไม่เกิน 500 ตัวอักษร)</label><textarea id="fd" rows="2" maxlength="500"></textarea><button class="btn" id="fs" style="margin-top:12px">ส่งคำขอ</button><div class="note" style="margin-top:10px">แนบรูป/วิดีโอหลักฐานยังไม่รองรับในเดโมนี้</div></div></div>
+ <div class="card" style="margin-top:14px"><h2>การแจ้งเตือน ${un?`<span class="b st-rejected">${un} ใหม่</span> <button class="btn s" data-a="readall" style="padding:2px 10px">อ่านทั้งหมด</button>`:''}</h2>${S.notif.length?S.notif.slice(0,8).map(n=>`<div style="font-size:13px;padding:4px 0;border-top:1px solid var(--bd);${n.read?'color:var(--mu)':'font-weight:700'}">${fd(n.t)} · ${esc(n.x)}</div>`).join(''):'<div class="empty">ยังไม่มีการแจ้งเตือน</div>'}</div>
+ <div class="card" style="margin-top:14px"><h2>คำขอและสถานะ</h2>${mine.length?mine.slice().reverse().map(r=>`<div style="border-top:1px solid var(--bd);padding:10px 0"><b>${r.no}</b> · ${TY[r.type]} · ${r.order} × ${r.qty}${r.appr?` (อนุมัติ ${r.appr})`:''} ${badge(r.status)} ${rbadge(r)}
+ ${r.track?`<div style="font-size:13px">พัสดุ (บันทึกโดยเจ้าหน้าที่): ${esc(r.track.c)} ${esc(r.track.n)}</div>`:''}
+ ${['submitted','need-more-information'].includes(r.status)?`<button class="btn s" data-a="cancel" data-no="${r.no}" style="padding:3px 10px">ยกเลิกคำขอ</button>`:''}
+ <ul class="tl">${r.h.map(h=>`<li>${fd(h.t)} — ${L[h.to]} โดย ${h.by}${h.note?': '+esc(h.note):''}</li>`).join('')}</ul>${msgs(r,false)}
+ ${CLOSED.includes(r.status)?'':`<input id="m_${r.no}" maxlength="500" placeholder="${r.status==='need-more-information'?'ตอบข้อมูลเพิ่มเติม…':'พิมพ์ข้อความถึงร้านค้า…'}" style="margin-top:4px"><div style="margin-top:6px">${r.status==='need-more-information'?`<button class="btn" data-a="reply" data-no="${r.no}">ส่งข้อมูลเพิ่มและกลับไปให้ตรวจสอบ</button> `:''}<button class="btn s" data-a="msg" data-who="c" data-no="${r.no}">ส่งข้อความ</button></div>`}</div>`).join(''):'<div class="empty">ยังไม่มีคำขอ — กรอกฟอร์มด้านบนเพื่อเริ่ม</div>'}</div>`}
+const filtered=()=>S.req.filter(r=>(!S.f.st||r.status===S.f.st)&&(!S.f.ty||r.type===S.f.ty)&&(!S.f.q||(r.no+r.order+(ord(r.order)?.productCategory||'')).toLowerCase().includes(S.f.q.toLowerCase())));
+function merch(){
+ const q=filtered(),r=S.sel&&find(S.sel);
+ return `<div class="note"><b>ส่วนร้านค้า:</b> สถานะเปลี่ยนได้ตาม Workflow เท่านั้น ยอดคืนเงินคำนวณจาก ราคา × จำนวนที่อนุมัติ (ไม่รวมส่วนลด/ภาษี/ค่าส่งเพราะหน่วยส่วนลดใน CSV ไม่ชัดเจน) การคืนเงิน/พัสดุเป็น <b>การบันทึกโดยเจ้าหน้าที่ ไม่ใช่การโอนอัตโนมัติ</b></div>
+ <div class="card"><h2>คิวคำขอ (${q.length}/${S.req.length})</h2><div class="grid k" style="gap:8px;margin-bottom:10px"><input id="fq1" placeholder="ค้นหา เลขคำขอ/คำสั่งซื้อ/หมวด" value="${esc(S.f.q)}" aria-label="ค้นหา"><select id="fs1" aria-label="สถานะ"><option value="">ทุกสถานะ</option>${Object.keys(L).map(k=>`<option value="${k}" ${S.f.st===k?'selected':''}>${L[k]}</option>`).join('')}</select><select id="ft1" aria-label="ประเภท"><option value="">ทุกประเภท</option>${Object.keys(TY).map(k=>`<option value="${k}" ${S.f.ty===k?'selected':''}>${TY[k]}</option>`).join('')}</select><button class="btn s" data-a="exp">⬇ ส่งออก Excel</button></div>
+ ${q.length?`<div class="tw"><table><tr><th>เลขคำขอ</th><th>ประเภท</th><th>คำสั่งซื้อ</th><th>จำนวน</th><th>เหตุผล</th><th>สถานะ</th><th></th></tr>${q.slice().reverse().map(x=>`<tr><td>${x.no}</td><td>${TY[x.type]}</td><td>${x.order}</td><td>${x.qty}</td><td>${esc(rl(x.reason))}</td><td>${badge(x.status)}</td><td><button class="btn" style="padding:3px 10px" data-a="sel" data-no="${x.no}">${CLOSED.includes(x.status)?'ดู':'ดำเนินการ'}</button></td></tr>`).join('')}</table></div>`:'<div class="empty">'+(S.req.length?'ไม่พบคำขอตามตัวกรอง':'ยังไม่มีคำขอ — สลับไปฝั่งลูกค้าเพื่อสร้างคำขอทดสอบ')+'</div>'}</div>
+ ${r?detail(r):''}<div class="note" style="margin-top:14px">ยังไม่รวมในเดโม: ตรวจรับสินค้า สต็อก นโยบายปรับแต่งได้ การมอบหมายงาน และ Audit Log แยก (ในโปรเจกต์จริงอยู่ Phase 4–5)</div><button class="btn s" data-a="reset">🗑 ลบข้อมูลทดสอบทั้งหมด</button>`}
+function detail(r){const o=ord(r.order),amt=o.productPrice*(r.appr||r.qty),rf=r.refund,rs=rf?rf.st:'none';
+  const ret=r.type==='return',closed=CLOSED.includes(r.status);
+  const steps=['ส่งคำขอ','ตรวจสอบ','อนุมัติ',ret?'คืนเงิน':'ส่งสินค้า','เสร็จสิ้น'];
+  const idx={submitted:0,'under-review':1,'need-more-information':1,approved:3,completed:5}[r.status];
+  const bad=r.status==='rejected'||r.status==='cancelled';
+  const stp=`<ol class="stp">${steps.map((s,i)=>{let c='';if(bad){c=i===1?'bad':i<1?'done':''}else if(r.status==='approved'&&i===2)c='done';else c=idx>i?'done':idx===i?'cur':'';
+    return `<li class="${c}">${i===1&&bad?(r.status==='rejected'?'ปฏิเสธ':'ยกเลิก'):s}</li>`}).join('')}</ol>`;
+  const B=(a,t,extra='',cls='btn big')=>`<button class="${cls}" data-a="${a}" data-no="${r.no}" ${extra}>${t}</button>`;
+  const mv=(to,t,cls,ex='')=>B('mv',t,`data-to="${to}" ${ex}`,cls||'btn big');
+  let nx='';
+  if(r.status==='submitted')nx=`<h4>ขั้นตอนถัดไป: เริ่มตรวจสอบคำขอ</h4><p>ลูกค้าส่งคำขอแล้ว กดเพื่อรับเรื่องไปตรวจสอบ</p><div class="acts">${mv('under-review','รับเรื่องและเริ่มตรวจสอบ')}</div>`;
+  else if(r.status==='under-review')nx=`<h4>ขั้นตอนถัดไป: ตัดสินใจคำขอนี้</h4><p>เลือกจำนวนที่อนุมัติ แล้วกดอนุมัติ หรือขอข้อมูลเพิ่ม / ปฏิเสธ (ต้องระบุเหตุผล)</p><div class="acts"><label for="ap" style="margin:0">อนุมัติ</label><input id="ap" type="number" min="1" max="${r.qty}" value="${r.qty}" style="max-width:80px"><span style="font-size:13px;color:var(--mu)">จาก ${r.qty} ชิ้น</span>${mv('approved','อนุมัติ')}${mv('need-more-information','ขอข้อมูลเพิ่ม','btn s')}${mv('rejected','ปฏิเสธ','btn s')}</div>`;
+  else if(r.status==='need-more-information')nx=`<h4>รอลูกค้าตอบกลับ</h4><p>ส่งคำถามถึงลูกค้าแล้ว เมื่อลูกค้าตอบ เคสจะกลับมาที่ "ตรวจสอบ" อัตโนมัติ ไม่ต้องทำอะไรตอนนี้</p>`;
+  else if(r.status==='approved'&&ret){
+    const fl=['สร้างรายการ','กำลังโอนเงิน','โอนสำเร็จ'],fi={none:-1,pending:0,processing:1,failed:1,succeeded:2,cancelled:-1}[rs];
+    const chips=`<div class="rfs">${fl.map((s,i)=>`<span class="${rs==='succeeded'?'ok':i===fi?'on':i<fi?'ok':''}">${i+1}. ${s}</span>`).join('')}${rs==='failed'?'<span class="on" style="background:#991b1b">โอนล้มเหลว</span>':''}${rs==='cancelled'?'<span style="background:#6b7280;color:#fff">ยกเลิกรายการแล้ว</span>':''}</div>`;
+    const R=(st,t,cls)=>B('ref',t,`data-st="${st}"`,cls||'btn big');
+    const L2=(st,t)=>B('ref',t,`data-st="${st}"`,'lnk');
+    let body;
+    if(rs==='none')body=`<h4>ขั้นตอนถัดไป: คืนเงิน ${m2(amt)}</h4><p>${r.appr} ชิ้น × ${m2(o.productPrice)} — เจ้าหน้าที่เป็นผู้บันทึก ระบบไม่ได้โอนเงินจริง</p><div class="acts">${R('pending','สร้างรายการคืนเงิน')}</div>`;
+    else if(rs==='pending')body=`<h4>รายการคืนเงิน ${m2(amt)} สร้างแล้ว</h4><p>เมื่อเริ่มโอนเงินให้ลูกค้า กดปุ่มด้านล่าง</p><div class="acts">${R('processing','เริ่มโอนเงิน')}${L2('cancelled','ยกเลิกรายการคืนเงิน')}</div>`;
+    else if(rs==='processing')body=`<h4>กำลังโอนเงิน ${m2(amt)}</h4><p>โอนเสร็จแล้วให้กรอกเลขอ้างอิงธุรกรรม แล้วกดยืนยัน</p><div class="acts"><input id="rf" placeholder="เลขอ้างอิงธุรกรรม เช่น TXN-1234" style="max-width:260px">${R('succeeded','ยืนยันว่าโอนสำเร็จ')}${L2('failed','โอนไม่สำเร็จ')}</div>`;
+    else if(rs==='failed')body=`<h4>โอนเงินไม่สำเร็จ</h4><p>ลองโอนใหม่ หรือยกเลิกรายการคืนเงิน</p><div class="acts">${R('processing','ลองโอนใหม่')}${L2('cancelled','ยกเลิกรายการคืนเงิน')}</div>`;
+    else if(rs==='cancelled')body=`<h4>รายการคืนเงินถูกยกเลิก</h4><p>เคสนี้ยังปิดไม่ได้ เพราะยังไม่ได้คืนเงิน กดเพื่อเริ่มรายการคืนเงินใหม่</p><div class="acts">${R('pending','เริ่มรายการคืนเงินใหม่')}</div>`;
+    else body=`<h4>✓ คืนเงิน ${m2(rf.amt)} สำเร็จ</h4><p>อ้างอิง ${esc(rf.ref||'-')} — กดปิดเคสเพื่อจบงาน</p><div class="acts">${mv('completed','ปิดเคส (เสร็จสิ้น)')}</div>`;
+    nx=chips+body}
+  else if(r.status==='approved')nx=r.track?`<h4>✓ บันทึกพัสดุแล้ว</h4><p>${esc(r.track.c)} · ${esc(r.track.n)} — กดปิดเคสเพื่อจบงาน</p><div class="acts">${mv('completed','ปิดเคส (เสร็จสิ้น)')}</div>`:`<h4>ขั้นตอนถัดไป: ส่งสินค้า${r.type==='claim'?'ซ่อม/ทดแทน':'ใหม่'}ให้ลูกค้า</h4><p>กรอกขนส่งและเลขพัสดุ (เจ้าหน้าที่บันทึกเอง ระบบไม่ได้เชื่อมขนส่ง)</p><div class="acts"><input id="tc" placeholder="ขนส่ง เช่น Kerry" style="max-width:170px"><input id="tn" placeholder="เลขพัสดุ" style="max-width:200px">${B('trk','บันทึกพัสดุ')}</div>`;
+  else nx=`<h4>เคสนี้ปิดแล้ว (${L[r.status]})</h4><p>ไม่ต้องดำเนินการเพิ่ม ดูประวัติด้านล่างได้</p>`;
+  return `<div class="card" id="dtl" style="margin-top:14px;border-color:var(--red);scroll-margin-top:8px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><h2 style="margin:0">${r.no} · ${TY[r.type]} ${badge(r.status)}</h2><button class="btn s" data-a="close" style="padding:3px 12px">ปิดหน้านี้ ✕</button></div>
+  <div class="kv" style="margin-top:12px"><div><span>คำสั่งซื้อ</span><b>${r.order}</b></div><div><span>สินค้า</span><b>${o.productCategory} · ${m2(o.productPrice)}/ชิ้น</b></div><div><span>จำนวนที่ขอ</span><b>${r.qty} ชิ้น${r.appr?` (อนุมัติ ${r.appr})`:''}</b></div><div><span>เหตุผลลูกค้า</span><b>${esc(rl(r.reason))}</b></div></div>${r.details?`<p style="font-size:13px;margin:0 0 10px"><b>รายละเอียดจากลูกค้า:</b> ${esc(r.details)}</p>`:''}
+  ${stp}<div class="nx ${closed?'done':''}">${nx}</div>
+  <h4>ข้อความ / บันทึกภายใน</h4>${msgs(r,true)}<input id="sm" maxlength="500" placeholder="พิมพ์ข้อความ…"><div style="margin-top:6px"><button class="btn" data-a="msg" data-who="s" data-no="${r.no}">ส่งถึงลูกค้า</button> <button class="btn s" data-a="msg" data-who="i" data-no="${r.no}">บันทึกภายใน (ลูกค้าไม่เห็น)</button></div>
+  <h4 style="margin-top:12px">ประวัติสถานะ</h4><ul class="tl">${r.h.map(h=>`<li>${fd(h.t)} — ${h.from?L[h.from]+' → ':''}${L[h.to]} โดย ${h.by}${h.note?': '+esc(h.note):''}</li>`).join('')}</ul></div>`}
+
+function ana(){return '<div id="anx"></div>'}
+function syncQ(){const sel=document.getElementById('fo');if(!sel)return;const fq=document.getElementById('fq'),o=orders().find(x=>x.orderId===sel.value),fh=document.getElementById('fh'),fs=document.getElementById('fs');
+ const go=()=>{if(!o)return;fq.max=Math.max(o.left,1);fh.textContent=`(ซื้อ ${o.orderQuantity} · เหลือสิทธิ์ ${o.left})`;fs.disabled=o.left<1;fq.disabled=o.left<1;
+  if(o.left<1)fh.textContent+=' — ใช้สิทธิ์ครบแล้ว';else if(+fq.value>o.left)fq.value=o.left;if(+fq.value<1&&o.left>=1)fq.value=1};
+ go();sel.onchange=()=>{S.lastOrd=sel.value;render()};fq.oninput=go}
+const csvCell=v=>{v=String(v??'');if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+function csv(){const h=['เลขคำขอ','ประเภท','คำสั่งซื้อ','หมวดสินค้า','จำนวนที่ขอ','จำนวนที่อนุมัติ','เหตุผล','สถานะ','สถานะคืนเงิน','ยอดคืนเงิน','ขนส่ง','เลขพัสดุ','วันที่ยื่นคำขอ'];
+  return [h.join(',')].concat(filtered().map(r=>[r.no,TY[r.type]||r.type,r.order,CTHG[ord(r.order)?.productCategory]||ord(r.order)?.productCategory,r.qty,r.appr??'',rl(r.reason),L[r.status]||r.status,r.refund?RL[r.refund.st]:'',r.refund?.amt??'',r.track?.c??'',r.track?.n??'',fd(r.created)].map(csvCell).join(','))).join('\n')}
+function dlCsv(){const s='\ufeff'+csv().replace(/\n/g,'\r\n');
+  try{const u=URL.createObjectURL(new Blob([s],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='returnflow-requests.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);return true}catch(e){return false}}
+function ask(title,cb){const d=document.getElementById('dlg');dt.textContent=title;dr.value='';de.textContent='';
+ dok.onclick=()=>{if(dr.value.trim().length<3){de.textContent='ต้องระบุอย่างน้อย 3 ตัวอักษร';return}d.close();cb(dr.value.trim())};dc.onclick=()=>d.close();d.showModal()}
+function resetTest(b){if(!b.dataset.sure){b.dataset.sure=1;const t0=b.textContent;b.textContent='กดอีกครั้งเพื่อยืนยันลบ';b.classList.remove('s');setTimeout(()=>{b.dataset.sure='';b.textContent=t0;b.classList.add('s')},4000);return}
+  S.req=[];S.notif=[];S.sel=null;S.n=1;save();window.render();toast('ลบข้อมูลทดสอบแล้ว เหลือเฉพาะข้อมูลจริง',1)}
+function bind(){
+ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{S.view=b.dataset.v;save();render()});
+ const fs=document.getElementById('fs');
+ if(fs)fs.onclick=()=>{fs.disabled=true;const res=api.create({order:fo.value,type:ft.value,qty:fq.value,reason:fr.value,details:fd.value,key:S.fk});
+  if(res.err){toast(res.err,0);fs.disabled=false;return}run(res,`ส่งคำขอ ${res.r.no} แล้ว`)};
+ ['fq1','fs1','ft1'].forEach(id=>{const e=document.getElementById(id);if(e)e.onchange=()=>{S.f={q:fq1.value.trim(),st:fs1.value,ty:ft1.value};save();render()}});
+ const v=id=>document.getElementById(id)?.value;
+ document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const a=b.dataset.a,no=b.dataset.no;
+  if(a==='sel'){S.sel=no;save();render();const e=document.getElementById('dtl');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});return}
+  if(a==='readall'){S.notif.forEach(n=>n.read=true);save();render();return}
+  if(a==='cancel')return run(api.move(no,'cancelled','ลูกค้ายกเลิก',0,'c'),'ยกเลิกคำขอแล้ว');
+  if(a==='reply'){const t=v('m_'+no);return run(api.move(no,'under-review',t,0,'c'),'ส่งข้อมูลเพิ่มแล้ว')}
+  if(a==='msg'){const t=b.dataset.who==='c'?v('m_'+no):v('sm');return run(api.msg(no,b.dataset.who,t),'ส่งข้อความแล้ว')}
+  if(a==='mv'){const to=b.dataset.to;if(['rejected','need-more-information'].includes(to))return ask((to==='rejected'?'ปฏิเสธ ':'ขอข้อมูลเพิ่ม ')+no,t=>run(api.move(no,to,t,0,'s'),'อัปเดตสถานะแล้ว'));
+   return run(api.move(no,to,'',v('ap'),'s'),'อัปเดตสถานะแล้ว')}
+  if(a==='ref')return run(api.refund(no,b.dataset.st,v('rf')),'บันทึกสถานะคืนเงินแล้ว (โดยเจ้าหน้าที่)');
+  if(a==='trk')return run(api.track(no,v('tc'),v('tn')),'บันทึกพัสดุแล้ว (โดยเจ้าหน้าที่)');
+  if(a==='exp'){document.getElementById('xt').value=csv();document.getElementById('xn').textContent=filtered().length;document.getElementById('ex').showModal();document.getElementById('xd').onclick=()=>{toast(dlCsv()?'กำลังดาวน์โหลดไฟล์ — เปิดด้วย Excel ได้เลย':'ดาวน์โหลดไม่ได้ ใช้การคัดลอกแทน',1)};document.getElementById('xc').onclick=()=>{const t=document.getElementById('xt');t.select();try{navigator.clipboard.writeText(t.value).then(()=>toast('คัดลอกแล้ว วางใน Excel ได้เลย',1),()=>document.execCommand('copy'))}catch(e){document.execCommand('copy')}}}
+  if(a==='reset')return resetTest(b);})}
+const AN=(()=>{const DD={"cats":["Books","Clothing","Electronics","Home","Toys"],"rs":["Changed mind","Defective","Not as described","Wrong item"],"A":[["2023-01",0,82,256],["2023-01",1,91,285],["2023-01",2,87,261],["2023-01",3,99,288],["2023-01",4,64,194],["2023-02",0,80,249],["2023-02",1,74,204],["2023-02",2,65,203],["2023-02",3,68,220],["2023-02",4,65,195],["2023-03",0,80,241],["2023-03",1,84,230],["2023-03",2,76,223],["2023-03",3,94,290],["2023-03",4,77,222],["2023-04",0,81,250],["2023-04",1,82,241],["2023-04",2,88,278],["2023-04",3,94,273],["2023-04",4,92,278],["2023-05",0,90,259],["2023-05",1,92,283],["2023-05",2,83,251],["2023-05",3,76,239],["2023-05",4,79,223],["2023-06",0,93,265],["2023-06",1,77,240],["2023-06",2,93,272],["2023-06",3,71,199],["2023-06",4,80,241],["2023-07",0,91,274],["2023-07",1,96,276],["2023-07",2,73,203],["2023-07",3,95,294],["2023-07",4,83,255],["2023-08",0,90,284],["2023-08",1,78,233],["2023-08",2,91,273],["2023-08",3,84,249],["2023-08",4,76,229],["2023-09",0,81,241],["2023-09",1,83,263],["2023-09",2,65,192],["2023-09",3,96,281],["2023-09",4,74,215],["2023-10",0,96,279],["2023-10",1,84,249],["2023-10",2,93,272],["2023-10",3,96,289],["2023-10",4,95,277],["2023-11",0,82,229],["2023-11",1,78,224],["2023-11",2,78,248],["2023-11",3,84,260],["2023-11",4,81,236],["2023-12",0,91,274],["2023-12",1,88,267],["2023-12",2,78,227],["2023-12",3,86,285],["2023-12",4,86,260],["2024-01",0,83,253],["2024-01",1,89,283],["2024-01",2,93,268],["2024-01",3,85,272],["2024-01",4,80,242],["2024-02",0,77,225],["2024-02",1,85,258],["2024-02",2,91,249],["2024-02",3,99,314],["2024-02",4,91,279],["2024-03",0,100,272],["2024-03",1,90,283],["2024-03",2,74,235],["2024-03",3,84,257],["2024-03",4,94,276],["2024-04",0,99,298],["2024-04",1,75,227],["2024-04",2,86,261],["2024-04",3,68,208],["2024-04",4,78,257],["2024-05",0,98,315],["2024-05",1,87,266],["2024-05",2,70,199],["2024-05",3,87,261],["2024-05",4,80,240],["2024-06",0,77,243],["2024-06",1,91,273],["2024-06",2,73,225],["2024-06",3,80,231],["2024-06",4,78,232],["2024-07",0,78,234],["2024-07",1,86,237],["2024-07",2,91,292],["2024-07",3,88,264],["2024-07",4,84,266],["2024-08",0,69,206],["2024-08",1,81,258],["2024-08",2,80,235],["2024-08",3,83,273],["2024-08",4,91,285],["2024-09",0,83,238],["2024-09",1,87,251],["2024-09",2,94,273],["2024-09",3,80,242],["2024-09",4,87,258],["2024-10",0,79,250],["2024-10",1,82,249],["2024-10",2,90,241],["2024-10",3,75,226],["2024-10",4,81,251],["2024-11",0,77,250],["2024-11",1,71,193],["2024-11",2,80,266],["2024-11",3,73,220],["2024-11",4,59,173],["2024-12",0,84,249],["2024-12",1,69,210],["2024-12",2,93,260],["2024-12",3,85,269],["2024-12",4,89,249]],"R":[["2023-01",0,0,12,31,200],["2023-01",0,1,8,29,155],["2023-01",0,2,11,26,158],["2023-01",0,3,16,52,200],["2023-01",1,0,17,57,292],["2023-01",1,1,14,33,171],["2023-01",1,2,13,44,156],["2023-01",1,3,9,32,112],["2023-01",2,0,9,25,174],["2023-01",2,1,11,33,150],["2023-01",2,2,9,24,128],["2023-01",2,3,12,42,166],["2023-01",3,0,10,29,156],["2023-01",3,1,12,40,140],["2023-01",3,2,14,38,221],["2023-01",3,3,15,51,210],["2023-01",4,0,8,21,130],["2023-01",4,1,9,30,141],["2023-01",4,2,8,19,149],["2023-01",4,3,9,28,129],["2023-02",0,0,10,28,157],["2023-02",0,1,10,28,139],["2023-02",0,2,9,38,110],["2023-02",0,3,7,25,92],["2023-02",1,0,4,11,76],["2023-02",1,1,15,49,223],["2023-02",1,2,8,22,142],["2023-02",1,3,12,22,193],["2023-02",2,0,4,13,60],["2023-02",2,1,10,28,157],["2023-02",2,2,7,20,96],["2023-02",2,3,7,20,94],["2023-02",3,0,6,21,67],["2023-02",3,1,12,41,203],["2023-02",3,2,5,20,60],["2023-02",3,3,6,17,93],["2023-02",4,0,13,40,155],["2023-02",4,1,8,28,116],["2023-02",4,2,13,44,220],["2023-02",4,3,2,3,51],["2023-03",0,0,8,21,128],["2023-03",0,1,13,48,150],["2023-03",0,2,18,61,298],["2023-03",0,3,10,32,158],["2023-03",1,0,10,21,157],["2023-03",1,1,11,30,190],["2023-03",1,2,14,35,170],["2023-03",1,3,11,32,183],["2023-03",2,0,11,34,180],["2023-03",2,1,10,33,147],["2023-03",2,2,8,26,117],["2023-03",2,3,10,29,173],["2023-03",3,0,8,27,147],["2023-03",3,1,16,53,284],["2023-03",3,2,12,31,222],["2023-03",3,3,12,41,147],["2023-03",4,0,8,13,114],["2023-03",4,1,10,32,157],["2023-03",4,2,8,27,115],["2023-03",4,3,12,36,148],["2023-04",0,0,10,30,138],["2023-04",0,1,9,22,123],["2023-04",0,2,8,16,142],["2023-04",0,3,16,47,213],["2023-04",1,0,14,38,216],["2023-04",1,1,13,39,208],["2023-04",1,2,9,30,123],["2023-04",1,3,7,12,123],["2023-04",2,0,10,21,190],["2023-04",2,1,12,42,178],["2023-04",2,2,9,32,128],["2023-04",2,3,7,23,92],["2023-04",3,0,12,32,192],["2023-04",3,1,12,35,166],["2023-04",3,2,14,39,193],["2023-04",3,3,11,40,177],["2023-04",4,0,9,28,188],["2023-04",4,1,8,28,143],["2023-04",4,2,13,42,194],["2023-04",4,3,16,40,245],["2023-05",0,0,11,27,188],["2023-05",0,1,16,45,235],["2023-05",0,2,10,32,134],["2023-05",0,3,12,35,202],["2023-05",1,0,14,49,182],["2023-05",1,1,12,42,201],["2023-05",1,2,12,36,200],["2023-05",1,3,15,45,225],["2023-05",2,0,9,28,102],["2023-05",2,1,10,31,207],["2023-05",2,2,17,50,266],["2023-05",2,3,7,18,92],["2023-05",3,0,11,31,160],["2023-05",3,1,12,42,186],["2023-05",3,2,6,17,84],["2023-05",3,3,8,22,146],["2023-05",4,0,10,20,191],["2023-05",4,1,12,31,114],["2023-05",4,2,13,40,216],["2023-05",4,3,6,20,112],["2023-06",0,0,13,46,167],["2023-06",0,1,14,40,128],["2023-06",0,2,14,30,231],["2023-06",0,3,12,36,175],["2023-06",1,0,12,39,188],["2023-06",1,1,9,32,69],["2023-06",1,2,12,37,187],["2023-06",1,3,9,29,110],["2023-06",2,0,11,30,179],["2023-06",2,1,13,43,174],["2023-06",2,2,9,25,107],["2023-06",2,3,10,35,156],["2023-06",3,0,10,38,196],["2023-06",3,1,10,27,166],["2023-06",3,2,7,18,112],["2023-06",3,3,10,32,74],["2023-06",4,0,9,28,120],["2023-06",4,1,11,37,175],["2023-06",4,2,10,35,137],["2023-06",4,3,13,28,198],["2023-07",0,0,9,20,186],["2023-07",0,1,13,43,185],["2023-07",0,2,8,25,94],["2023-07",0,3,9,27,118],["2023-07",1,0,19,54,302],["2023-07",1,1,9,34,135],["2023-07",1,2,8,24,151],["2023-07",1,3,15,37,243],["2023-07",2,0,10,34,94],["2023-07",2,1,10,26,130],["2023-07",2,2,11,22,185],["2023-07",2,3,7,25,73],["2023-07",3,0,19,64,303],["2023-07",3,1,10,27,181],["2023-07",3,2,8,23,128],["2023-07",3,3,8,27,91],["2023-07",4,0,11,39,152],["2023-07",4,1,14,34,230],["2023-07",4,2,8,24,174],["2023-07",4,3,8,27,107],["2023-08",0,0,11,39,171],["2023-08",0,1,9,18,116],["2023-08",0,2,13,50,216],["2023-08",0,3,16,41,210],["2023-08",1,0,12,38,132],["2023-08",1,1,11,32,141],["2023-08",1,2,7,26,121],["2023-08",1,3,11,41,164],["2023-08",2,0,12,40,102],["2023-08",2,1,16,52,180],["2023-08",2,2,7,19,119],["2023-08",2,3,12,36,178],["2023-08",3,0,8,20,110],["2023-08",3,1,16,48,249],["2023-08",3,2,10,24,133],["2023-08",3,3,14,46,258],["2023-08",4,0,9,26,127],["2023-08",4,1,11,35,144],["2023-08",4,2,11,32,141],["2023-08",4,3,6,15,92],["2023-09",0,0,10,32,109],["2023-09",0,1,12,36,192],["2023-09",0,2,7,26,144],["2023-09",0,3,14,32,205],["2023-09",1,0,5,14,37],["2023-09",1,1,15,51,208],["2023-09",1,2,12,37,180],["2023-09",1,3,13,39,213],["2023-09",2,0,5,20,112],["2023-09",2,1,3,8,37],["2023-09",2,2,9,24,81],["2023-09",2,3,12,29,152],["2023-09",3,0,13,34,246],["2023-09",3,1,13,45,197],["2023-09",3,2,8,20,143],["2023-09",3,3,10,30,214],["2023-09",4,0,7,24,138],["2023-09",4,1,12,33,149],["2023-09",4,2,9,22,124],["2023-09",4,3,8,22,104],["2023-10",0,0,6,10,94],["2023-10",0,1,11,35,146],["2023-10",0,2,12,30,144],["2023-10",0,3,15,44,269],["2023-10",1,0,13,44,168],["2023-10",1,1,6,20,108],["2023-10",1,2,10,33,156],["2023-10",1,3,13,31,183],["2023-10",2,0,8,25,53],["2023-10",2,1,13,36,220],["2023-10",2,2,11,30,214],["2023-10",2,3,13,39,172],["2023-10",3,0,12,38,198],["2023-10",3,1,7,24,88],["2023-10",3,2,12,36,117],["2023-10",3,3,11,31,199],["2023-10",4,0,13,38,229],["2023-10",4,1,19,49,252],["2023-10",4,2,13,42,210],["2023-10",4,3,15,46,235],["2023-11",0,0,6,17,107],["2023-11",0,1,11,32,134],["2023-11",0,2,12,35,183],["2023-11",0,3,15,45,247],["2023-11",1,0,12,35,176],["2023-11",1,1,5,13,73],["2023-11",1,2,12,35,206],["2023-11",1,3,14,48,186],["2023-11",2,0,7,25,77],["2023-11",2,1,7,18,118],["2023-11",2,2,11,42,217],["2023-11",2,3,8,27,140],["2023-11",3,0,10,36,157],["2023-11",3,1,11,34,184],["2023-11",3,2,11,28,171],["2023-11",3,3,10,31,154],["2023-11",4,0,6,20,114],["2023-11",4,1,9,30,145],["2023-11",4,2,10,24,137],["2023-11",4,3,5,15,53],["2023-12",0,0,15,43,226],["2023-12",0,1,15,45,173],["2023-12",0,2,8,22,114],["2023-12",0,3,9,27,190],["2023-12",1,0,11,37,206],["2023-12",1,1,15,39,221],["2023-12",1,2,15,45,223],["2023-12",1,3,6,18,89],["2023-12",2,0,9,21,145],["2023-12",2,1,8,23,167],["2023-12",2,2,15,39,253],["2023-12",2,3,7,25,121],["2023-12",3,0,17,56,231],["2023-12",3,1,7,19,132],["2023-12",3,2,13,42,117],["2023-12",3,3,10,35,135],["2023-12",4,0,8,20,170],["2023-12",4,1,14,44,199],["2023-12",4,2,8,30,131],["2023-12",4,3,14,44,245],["2024-01",0,0,12,39,219],["2024-01",0,1,10,29,222],["2024-01",0,2,13,42,168],["2024-01",0,3,9,25,126],["2024-01",1,0,10,35,141],["2024-01",1,1,13,40,189],["2024-01",1,2,14,49,248],["2024-01",1,3,10,29,144],["2024-01",2,0,9,24,201],["2024-01",2,1,11,33,170],["2024-01",2,2,20,58,368],["2024-01",2,3,13,32,180],["2024-01",3,0,13,39,205],["2024-01",3,1,5,15,99],["2024-01",3,2,10,36,162],["2024-01",3,3,12,36,179],["2024-01",4,0,8,21,121],["2024-01",4,1,12,30,205],["2024-01",4,2,4,11,51],["2024-01",4,3,7,27,90],["2024-02",0,0,12,40,216],["2024-02",0,1,12,38,225],["2024-02",0,2,8,20,145],["2024-02",0,3,8,26,112],["2024-02",1,0,10,33,229],["2024-02",1,1,8,27,129],["2024-02",1,2,11,37,172],["2024-02",1,3,11,30,203],["2024-02",2,0,15,42,209],["2024-02",2,1,11,37,153],["2024-02",2,2,8,15,131],["2024-02",2,3,10,32,135],["2024-02",3,0,11,39,221],["2024-02",3,1,8,28,172],["2024-02",3,2,9,27,129],["2024-02",3,3,12,38,159],["2024-02",4,0,8,30,82],["2024-02",4,1,13,34,185],["2024-02",4,2,14,52,226],["2024-02",4,3,13,41,152],["2024-03",0,0,9,28,100],["2024-03",0,1,14,34,188],["2024-03",0,2,12,38,112],["2024-03",0,3,12,23,154],["2024-03",1,0,12,43,189],["2024-03",1,1,17,62,258],["2024-03",1,2,10,28,156],["2024-03",1,3,9,22,119],["2024-03",2,0,5,16,82],["2024-03",2,1,11,39,175],["2024-03",2,2,11,31,135],["2024-03",2,3,9,34,120],["2024-03",3,0,4,11,77],["2024-03",3,1,15,51,234],["2024-03",3,2,15,49,234],["2024-03",3,3,9,21,152],["2024-03",4,0,16,45,280],["2024-03",4,1,6,24,50],["2024-03",4,2,9,26,122],["2024-03",4,3,10,32,178],["2024-04",0,0,13,38,220],["2024-04",0,1,16,55,240],["2024-04",0,2,7,23,98],["2024-04",0,3,11,31,178],["2024-04",1,0,7,21,88],["2024-04",1,1,8,17,92],["2024-04",1,2,10,37,151],["2024-04",1,3,12,38,140],["2024-04",2,0,13,41,207],["2024-04",2,1,12,37,200],["2024-04",2,2,9,29,128],["2024-04",2,3,20,70,362],["2024-04",3,0,6,17,79],["2024-04",3,1,10,27,219],["2024-04",3,2,6,22,83],["2024-04",3,3,12,38,220],["2024-04",4,0,9,30,149],["2024-04",4,1,9,33,157],["2024-04",4,2,8,30,102],["2024-04",4,3,12,43,144],["2024-05",0,0,16,53,242],["2024-05",0,1,11,22,166],["2024-05",0,2,11,32,184],["2024-05",0,3,10,35,138],["2024-05",1,0,13,39,213],["2024-05",1,1,11,30,130],["2024-05",1,2,17,62,208],["2024-05",1,3,6,22,79],["2024-05",2,0,11,31,182],["2024-05",2,1,12,26,191],["2024-05",2,2,8,22,92],["2024-05",2,3,6,18,77],["2024-05",3,0,14,46,171],["2024-05",3,1,10,24,164],["2024-05",3,2,8,26,80],["2024-05",3,3,7,19,76],["2024-05",4,0,9,26,160],["2024-05",4,1,10,37,151],["2024-05",4,2,8,24,74],["2024-05",4,3,8,21,132],["2024-06",0,0,10,28,146],["2024-06",0,1,10,39,155],["2024-06",0,2,12,38,196],["2024-06",0,3,5,20,66],["2024-06",1,0,10,29,168],["2024-06",1,1,16,39,230],["2024-06",1,2,4,12,86],["2024-06",1,3,9,31,112],["2024-06",2,0,10,32,118],["2024-06",2,1,14,37,235],["2024-06",2,2,9,30,164],["2024-06",2,3,6,21,116],["2024-06",3,0,9,23,133],["2024-06",3,1,13,35,195],["2024-06",3,2,9,25,189],["2024-06",3,3,7,21,67],["2024-06",4,0,9,29,119],["2024-06",4,1,10,27,98],["2024-06",4,2,10,28,193],["2024-06",4,3,6,18,71],["2024-07",0,0,7,16,105],["2024-07",0,1,8,32,106],["2024-07",0,2,5,11,82],["2024-07",0,3,16,47,250],["2024-07",1,0,12,35,196],["2024-07",1,1,14,42,231],["2024-07",1,2,13,35,232],["2024-07",1,3,6,17,101],["2024-07",2,0,13,42,176],["2024-07",2,1,19,65,200],["2024-07",2,2,13,42,216],["2024-07",2,3,10,26,144],["2024-07",3,0,9,27,142],["2024-07",3,1,9,27,145],["2024-07",3,2,11,36,157],["2024-07",3,3,16,39,226],["2024-07",4,0,9,31,125],["2024-07",4,1,10,30,87],["2024-07",4,2,8,24,136],["2024-07",4,3,12,43,224],["2024-08",0,0,18,46,282],["2024-08",0,1,7,18,124],["2024-08",0,2,13,42,223],["2024-08",0,3,7,19,112],["2024-08",1,0,13,46,164],["2024-08",1,1,10,25,197],["2024-08",1,2,7,17,135],["2024-08",1,3,9,28,114],["2024-08",2,0,8,27,143],["2024-08",2,1,11,32,144],["2024-08",2,2,10,23,148],["2024-08",2,3,14,44,264],["2024-08",3,0,13,52,246],["2024-08",3,1,14,40,195],["2024-08",3,2,8,23,117],["2024-08",3,3,11,44,142],["2024-08",4,0,17,47,252],["2024-08",4,1,8,25,168],["2024-08",4,2,11,34,179],["2024-08",4,3,13,43,87],["2024-09",0,0,11,29,152],["2024-09",0,1,8,21,107],["2024-09",0,2,6,21,96],["2024-09",0,3,7,21,84],["2024-09",1,0,13,32,206],["2024-09",1,1,11,26,189],["2024-09",1,2,8,25,77],["2024-09",1,3,13,39,214],["2024-09",2,0,10,30,148],["2024-09",2,1,19,57,303],["2024-09",2,2,11,26,173],["2024-09",2,3,21,61,312],["2024-09",3,0,15,46,219],["2024-09",3,1,10,31,123],["2024-09",3,2,11,34,159],["2024-09",3,3,11,29,134],["2024-09",4,0,10,26,93],["2024-09",4,1,13,35,218],["2024-09",4,2,11,30,161],["2024-09",4,3,12,38,191],["2024-10",0,0,5,11,60],["2024-10",0,1,7,26,147],["2024-10",0,2,11,36,184],["2024-10",0,3,12,37,176],["2024-10",1,0,11,33,199],["2024-10",1,1,10,32,180],["2024-10",1,2,10,30,182],["2024-10",1,3,9,20,176],["2024-10",2,0,10,31,144],["2024-10",2,1,8,16,117],["2024-10",2,2,17,48,312],["2024-10",2,3,10,21,121],["2024-10",3,0,13,46,207],["2024-10",3,1,8,20,125],["2024-10",3,2,6,17,111],["2024-10",3,3,11,27,144],["2024-10",4,0,9,26,188],["2024-10",4,1,12,42,231],["2024-10",4,2,8,24,72],["2024-10",4,3,9,29,111],["2024-11",0,0,14,53,222],["2024-11",0,1,7,27,98],["2024-11",0,2,8,23,141],["2024-11",0,3,9,24,142],["2024-11",1,0,13,43,211],["2024-11",1,1,8,20,90],["2024-11",1,2,9,29,171],["2024-11",1,3,8,24,98],["2024-11",2,0,11,34,156],["2024-11",2,1,7,21,120],["2024-11",2,2,6,15,67],["2024-11",2,3,13,47,220],["2024-11",3,0,7,23,89],["2024-11",3,1,7,23,127],["2024-11",3,2,8,25,120],["2024-11",3,3,7,19,125],["2024-11",4,0,10,26,137],["2024-11",4,1,11,29,146],["2024-11",4,2,4,15,40],["2024-11",4,3,6,18,84],["2024-12",0,0,11,34,156],["2024-12",0,1,11,42,188],["2024-12",0,2,6,16,92],["2024-12",0,3,14,32,202],["2024-12",1,0,8,28,150],["2024-12",1,1,12,38,225],["2024-12",1,2,9,27,180],["2024-12",1,3,10,26,194],["2024-12",2,0,7,22,73],["2024-12",2,1,15,40,220],["2024-12",2,2,9,22,178],["2024-12",2,3,13,35,160],["2024-12",3,0,11,32,138],["2024-12",3,1,10,31,133],["2024-12",3,2,4,10,62],["2024-12",3,3,12,39,157],["2024-12",4,0,8,28,122],["2024-12",4,1,11,29,118],["2024-12",4,2,18,48,266],["2024-12",4,3,9,22,181]]};
+
+const TH=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const RTH=RTHG;
+const CTH=CTHG;
+const RC=['var(--red)','var(--yel)','var(--c3)','var(--c4)'];
+const F={y:'',c:'',r:''};
+const fmt=n=>n.toLocaleString('th-TH'),pc=(a,b)=>b>0?(a/b*100).toFixed(1)+'%':'N/A';
+const be=ym=>+ym.slice(0,4)+543,mo=ym=>+ym.slice(5)-1;
+const rn=i=>RTH[DD.rs[i]]||DD.rs[i],cn=i=>CTH[DD.cats[i]]||DD.cats[i];
+const YRS=[...new Set(DD.A.map(x=>be(x[0])))].sort();
+const yOk=ym=>!F.y||be(ym)==F.y;
+// ข้อมูลทดสอบ (คำขอที่สร้างในเดโม ยกเว้นที่ปฏิเสธ/ยกเลิก) ถูกรวมเข้าการคำนวณร่วมกับข้อมูลจริงจาก CSV
+// ข้อมูลจริงอยู่ใน DD (อ่านอย่างเดียว ลบไม่ได้) ส่วนข้อมูลทดสอบมาจาก S.req และหายไปเมื่อกดลบ
+const testRows=()=>S.req.filter(r=>!['rejected','cancelled'].includes(r.status)).map(r=>{const o=ord(r.order);if(!o)return null;
+  const c=DD.cats.indexOf(o.productCategory),j=DD.rs.indexOf(r.reason);if(c<0||j<0)return null;
+  return[o.orderDate.slice(0,7),c,j,1,r.appr||r.qty,0,1]}).filter(Boolean);
+function calc(ignoreCat){
+ const A=DD.A.filter(x=>yOk(x[0])&&(ignoreCat||F.c===''||x[1]==F.c));
+ const R=DD.R.concat(testRows()).filter(x=>yOk(x[0])&&(ignoreCat||F.c===''||x[1]==F.c)&&(F.r===''||x[2]==F.r));
+ return{A,R}}
+const sum=(a,i)=>a.reduce((s,x)=>s+x[i],0);
+function render(){
+ const root=document.getElementById('anx');if(!root)return;
+ const bar=`<div class="fl"><div><label for="a_y">ปี (พ.ศ.)</label><select id="a_y"><option value="">${YRS[0]}–${YRS[YRS.length-1]} ทั้งหมด</option>${YRS.map(y=>`<option ${F.y==y?'selected':''}>${y}</option>`).join('')}</select></div><div><label for="a_c">หมวดสินค้า</label><select id="a_c"><option value="">ทุกหมวด</option>${DD.cats.map((c,i)=>`<option value="${i}" ${F.c!==''&&F.c==i?'selected':''}>${cn(i)}</option>`).join('')}</select></div><div><label for="a_r">เหตุผลการคืน</label><select id="a_r"><option value="">ทุกเหตุผล</option>${DD.rs.map((c,i)=>`<option value="${i}" ${F.r!==''&&F.r==i?'selected':''}>${rn(i)}</option>`).join('')}</select></div><button class="btn s" id="a_x" type="button">ล้างตัวกรอง</button></div>`;
+  const {A,R}=calc(false),all=calc(true);
+ const ord=sum(A,2),units=sum(A,3),rO=sum(R,3),rU=sum(R,4),days=sum(R,5),realN=sum(R.filter(x=>!x[6]),3),tN=sum(R.filter(x=>x[6]),3);
+ if(!ord){root.innerHTML=bar+'<div class="card empty">ไม่มีข้อมูลในตัวกรองนี้ ลองเลือกปีหรือหมวดอื่น หรือกดล้างตัวกรอง</div>';wire(root);return}
+ const byR=DD.rs.map((_,i)=>R.filter(x=>x[2]==i).reduce((s,x)=>s+x[3],0));
+ const top=byR.indexOf(Math.max(...byR));
+ // category stats (ignore category filter so bars compare all categories)
+ const cs=DD.cats.map((_,i)=>{const a=all.A.filter(x=>x[1]==i),r=all.R.filter(x=>x[1]==i);
+  const rr=DD.rs.map((_,j)=>r.filter(x=>x[2]==j).reduce((s,x)=>s+x[3],0));
+  return{i,o:sum(a,2),u:sum(a,3),n:sum(r,3),ru:sum(r,4),main:rr.indexOf(Math.max(...rr)),mx:Math.max(...rr)}}).filter(c=>c.o);
+ const avg=sum(all.R,4)/Math.max(1,sum(all.A,3));
+ cs.forEach(c=>c.rate=c.ru/c.u);
+ const sorted=[...cs].sort((a,b)=>b.n-a.n),maxN=sorted[0].n||1;
+ const hi=[...cs].sort((a,b)=>b.rate-a.rate);
+ // trend
+ const mm={};A.forEach(x=>{(mm[x[0]]=mm[x[0]]||{o:0,n:0}).o+=x[2]});R.forEach(x=>{(mm[x[0]]=mm[x[0]]||{o:0,n:0}).n+=x[3]});
+ const ks=Object.keys(mm).sort(),mx=Math.max(...ks.map(k=>mm[k].o));
+ const W=640,H=210,px=36,py=14,sx=i=>px+(ks.length>1?i*(W-px-10)/(ks.length-1):0),sy=v=>H-26-(v/mx)*(H-26-py);
+ const pl=key=>ks.map((k,i)=>sx(i)+','+sy(mm[k][key])).join(' ');
+ const pk=ks.reduce((b,k)=>mm[k].n>mm[b].n?k:b,ks[0]);
+ const grid=[0,.5,1].map(f=>`<line x1="${px}" x2="${W-6}" y1="${sy(mx*f)}" y2="${sy(mx*f)}" stroke="var(--bd)"/><text x="${px-6}" y="${sy(mx*f)+4}" text-anchor="end">${Math.round(mx*f)}</text>`).join('');
+ const xl=ks.map((k,i)=>(ks.length>12?i%3==0:true)?`<text x="${sx(i)}" y="${H-8}" text-anchor="middle">${TH[mo(k)]}${ks.length>12&&mo(k)==0?' '+String(be(k)).slice(2):''}</text>`:'').join('');
+ // donut
+ const tot=byR.reduce((a,b)=>a+b,0)||1;let off=0;const Rr=52,C=2*Math.PI*Rr;
+ const arcs=byR.map((v,i)=>{const l=v/tot*C,s=`<circle r="${Rr}" cx="70" cy="70" fill="none" stroke="${RC[i]}" stroke-width="26" style="--c:${C}" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}" transform="rotate(-90 70 70)" data-tip="${rn(i)}: ${fmt(v)} คำขอ (${pc(v,tot)})"/>`;off+=l;return s}).join('');
+ // actions
+ const act=[];const h0=hi[0],hl=hi[hi.length-1];
+ const gap=(h0.rate-hl.rate)*100;
+ act.push(gap>=3?`<li class="hot"><b>หมวด${cn(h0.i)}มีอัตราคืนสูงสุด (${(h0.rate*100).toFixed(1)}%)</b>สูงกว่าหมวด${cn(hl.i)}ซึ่งต่ำสุด ${gap.toFixed(1)} จุด ควรตรวจคุณภาพและคำอธิบายสินค้าหมวดนี้ก่อน</li>`:`<li><b>อัตราคืนระหว่างหมวดต่างกันน้อย (ห่างกัน ${gap.toFixed(1)} จุด)</b>สูงสุดคือ${cn(h0.i)} ${(h0.rate*100).toFixed(1)}% ยังสรุปไม่ได้ว่ามีหมวดใดผิดปกติ ปัญหาน่าจะกระจายทุกหมวด</li>`);
+ act.push(`<li class="${byR[top]/tot>=.3?'hot':''}"><b>เหตุผลหลักคือ “${rn(top)}” (${pc(byR[top],tot)} ของคำขอ)</b>${DD.rs[top]=='Defective'?'ตรวจสภาพสินค้าก่อนจัดส่ง':DD.rs[top]=='Wrong item'?'ตรวจขั้นตอนหยิบและแพ็กสินค้า':DD.rs[top]=='Not as described'?'ปรับรูปและรายละเอียดสินค้าให้ตรงของจริง':'ทบทวนนโยบายคืนสินค้าเมื่อเปลี่ยนใจ'} สัดส่วนเหตุผลทั้ง 4 ข้อใกล้กัน จึงไม่มีสาเหตุเดียวที่ชี้ขาด</li>`);
+ act.push(`<li><b>เดือนที่มีคำขอคืนสูงสุด: ${TH[mo(pk)]} ${be(pk)} (${mm[pk].n} ออเดอร์)</b>เทียบกับออเดอร์ทั้งเดือน ${mm[pk].o} รายการ ถ้าต้องการหาสาเหตุให้ย้อนดูออเดอร์เดือนนี้</li>`);
+ const sp=f=>{const v=ks.map(k=>f(mm[k])),m=Math.max(...v,1e-9);return ks.length>1?`<svg class="spk" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true"><polyline pathLength="1" points="${v.map((y,i)=>(i*100/(ks.length-1)).toFixed(1)+','+(24-y/m*21).toFixed(1)).join(' ')}"/></svg>`:''};
+  const per=`${TH[mo(ks[0])]} ${be(ks[0])} – ${TH[mo(ks[ks.length-1])]} ${be(ks[ks.length-1])}`;
+  const hero=`<div class="hero"><div><span class="pl">📅 ${per}</span><h1>ภาพรวมการคืนสินค้า</h1><p>ลูกค้าคืนสินค้า <b>${pc(rO,ord)}</b> ของออเดอร์ · เหตุผลหลักคือ <b>${rn(top)}</b> · หมวดที่อัตราคืนสูงสุดคือ <b>${cn(hi[0].i)}</b> (${(hi[0].rate*100).toFixed(1)}%)</p></div><div class="big"><b data-cu="${rU/units*100}" data-f="p">${pc(rU,units)}</b><span>อัตราคืนตามหน่วย</span></div></div>`;
+  root.innerHTML=hero+bar+tb(tN,S.req.length)+`
+ <div class="g k">
+ <div class="card kpi"><span class="ic">↩️</span><p>คำขอคืนทั้งหมด</p><h3 data-cu="${rO}" data-f="i">${fmt(rO)}</h3>${sp(m=>m.n)}<small>จาก ${fmt(ord)} ออเดอร์ (${pc(rO,ord)})</small></div>
+ <div class="card kpi"><span class="ic">📊</span><p>อัตราคืนสินค้า (ตามหน่วย)</p><h3 data-cu="${rU/units*100}" data-f="p">${pc(rU,units)}</h3>${sp(m=>m.n/Math.max(m.o,1))}<small>คืน ${fmt(rU)} จากขาย ${fmt(units)} หน่วย</small></div>
+ <div class="card kpi y"><span class="ic">🔍</span><p>เหตุผลที่พบมากสุด</p><h3 style="font-size:22px;padding:6px 0">${rn(top)}</h3><small>${pc(byR[top],tot)} ของคำขอ</small></div>
+ <div class="card kpi y"><span class="ic">⏱️</span><p>เวลาเฉลี่ยก่อนยื่นคืน</p><h3 data-cu="${realN?days/realN:0}" data-f="d">${realN?(days/realN).toFixed(1):'N/A'} วัน</h3><small>นับจากวันสั่งซื้อถึงวันคืน</small></div></div>
+ <div class="g two"><div class="card"><h2>หมวดสินค้าที่ถูกคืนมากที่สุด</h2><p class="sub">จำนวนออเดอร์ที่ถูกคืน กดแท่งเพื่อกรองหมวด</p>
+ ${sorted.map((c,ix)=>`<button class="row ${ix==0?'top':''} ${F.c!==''&&F.c==c.i?'on':''}" style="--i:${ix}" data-c="${c.i}" data-tip="${cn(c.i)}: ถูกคืน ${fmt(c.n)} จาก ${fmt(c.o)} ออเดอร์ · อัตราคืน ${(c.rate*100).toFixed(1)}%"><span><span class="rk">${ix+1}</span>${cn(c.i)}</span><span class="tr"><i style="width:${c.n/maxN*100}%"></i></span><span>${fmt(c.n)} · ${(c.rate*100).toFixed(1)}%</span></button>`).join('')}</div>
+ <div class="card"><h2>ลูกค้าคืนเพราะอะไร</h2><p class="sub">สัดส่วนเหตุผลการคืน</p><div class="don"><svg width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="สัดส่วนเหตุผลการคืน">${arcs}<text x="70" y="68" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--tx)" data-cu="${tot}" data-f="i">${fmt(tot)}</text><text x="70" y="84" text-anchor="middle">คำขอ</text></svg>
+ <div class="leg">${byR.map((v,i)=>`<div><span class="sw" style="background:${RC[i]}"></span>${rn(i)} ${pc(v,tot)}</div>`).join('')}</div></div></div></div>
+ <div class="card" style="margin-top:14px"><h2>แนวโน้มรายเดือน</h2><p class="sub">เส้นแดง = ออเดอร์ที่ถูกคืน · เส้นเทา = ออเดอร์ทั้งหมด (ตามเดือนที่สั่งซื้อ)</p>
+ <div class="tw"><svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:480px" role="img" aria-label="แนวโน้มรายเดือน"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C62828" stop-opacity=".35"/><stop offset="1" stop-color="#FFC928" stop-opacity="0"/></linearGradient></defs><g class="gl">${grid}</g>${xl}<polygon class="ar" points="${sx(0)},${H-26} ${pl('n')} ${sx(ks.length-1)},${H-26}" fill="url(#lg)"/><polyline class="gl" points="${pl('o')}" fill="none" stroke="var(--c4)" stroke-width="2" stroke-dasharray="4 3"/><polyline class="ln" pathLength="1" points="${pl('n')}" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linejoin="round"/><circle class="pk" cx="${sx(ks.indexOf(pk))}" cy="${sy(mm[pk].n)}" r="5"/><circle cx="${sx(ks.indexOf(pk))}" cy="${sy(mm[pk].n)}" r="5" fill="var(--yel)" stroke="var(--red)" stroke-width="2"/>${ks.map((k,i)=>`<circle cx="${sx(i)}" cy="${sy(mm[k].n)}" r="9" fill="transparent" data-tip="${TH[mo(k)]} ${be(k)}: ถูกคืน ${mm[k].n} จาก ${mm[k].o} ออเดอร์ (${pc(mm[k].n,mm[k].o)})"/>`).join('')}</svg></div></div>
+ <div class="g two"><div class="card" style="grid-column:1/-1"><h2>หมวดสินค้าที่ควรตรวจสอบ</h2><p class="sub">ป้ายสถานะเทียบอัตราคืนของหมวดกับค่าเฉลี่ยรวม (${(avg*100).toFixed(1)}%): สูงสุด = ต้องตรวจสอบ, สูงกว่าเฉลี่ย = เฝ้าระวัง, นอกนั้น = ปกติ</p>
+ <div class="tw"><table><thead><tr><th>หมวด</th><th class="n">ออเดอร์</th><th class="n">ถูกคืน</th><th class="n">อัตราคืน (หน่วย)</th><th>เหตุผลหลัก</th><th>สถานะ</th></tr></thead><tbody>
+ ${hi.map((c,k)=>{const s=k==0?['st-rejected','ต้องตรวจสอบ']:c.rate>avg?['st-submitted','เฝ้าระวัง']:['st-completed','ปกติ'];return`<tr data-c="${c.i}" class="${F.c!==''&&F.c==c.i?'on':''}"><td>${cn(c.i)}</td><td class="n">${fmt(c.o)}</td><td class="n">${fmt(c.n)}</td><td class="n">${(c.rate*100).toFixed(1)}%</td><td>${rn(c.main)}</td><td><span class="b ${s[0]}">${s[1]}</span></td></tr>`}).join('')}</tbody></table></div></div>
+ <div class="card" style="grid-column:1/-1"><h2>สิ่งที่ควรทำ</h2><p class="sub">สรุปจากข้อมูลตามตัวกรองปัจจุบัน</p><ul class="act">${act.join('')}</ul></div></div>
+ <p class="note">อัตราคืน = หน่วยที่คืน ÷ หน่วยที่ขาย ในช่วงและหมวดเดียวกัน (เมื่อเลือกเหตุผล จะแสดงสัดส่วนของหน่วยที่คืนด้วยเหตุผลนั้น) · ข้อมูลจริง: ${fmt(sum(DD.A,2))} ออเดอร์ และ ${fmt(sum(DD.R,3))} คำขอคืน ${per} · ข้อมูลสังเคราะห์ ใช้เพื่อสาธิตการวิเคราะห์เท่านั้น ไม่ใช่ธุรกรรมจริง · ข้อมูลไม่แยกประเภทคืน/เคลม และไม่มีชื่อสินค้ารายชิ้น จึงวิเคราะห์ระดับหมวด</p>`;wire(root);
+}
+const tb=(n,all)=>`<div class="tbn ${n?'on':''}"><div>${n?`<b>รวมข้อมูลทดสอบ ${fmt(n)} คำขอ</b> เข้ากับข้อมูลจริงแล้ว (ตัวเลขด้านล่างคือผลรวม)`:'<b>ตอนนี้แสดงเฉพาะข้อมูลจริงจาก CSV</b> ถ้ามีคำขอทดสอบจากแท็บลูกค้า/ร้านค้า จะถูกรวมเข้ามาที่นี่อัตโนมัติ'}<br><small>ข้อมูลจริง (CSV) ลบไม่ได้ · ลบได้เฉพาะข้อมูลทดสอบ${all>n?` · มีคำขอที่ปฏิเสธ/ยกเลิก ${all-n} รายการที่ไม่ถูกนับ`:''}</small></div>${all?'<button class="btn s" data-a="reset" type="button">🗑 ลบข้อมูลทดสอบ ('+all+')</button>':''}</div>`;
+function sync(){render()}
+function countUp(root){
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const fm={i:v=>fmt(Math.round(v)),p:v=>v.toFixed(1)+'%',d:v=>v.toFixed(1)+' วัน'};
+  root.querySelectorAll('[data-cu]').forEach(el=>{const to=+el.dataset.cu,f=fm[el.dataset.f]||fm.i;if(!isFinite(to))return;const fin=el.textContent;let t0=null;
+   const st=ts=>{if(t0===null)t0=ts;const k=Math.min(1,(ts-t0)/900),e=1-Math.pow(1-k,3);el.textContent=k<1?f(to*e):fin;if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)})}
+function wire(root){countUp(root);
+ const g=id=>root.querySelector('#'+id);
+ g('a_y').onchange=e=>{F.y=e.target.value;sync()};g('a_c').onchange=e=>{F.c=e.target.value;sync()};g('a_r').onchange=e=>{F.r=e.target.value;sync()};
+ g('a_x').onclick=()=>{F.y=F.c=F.r='';sync()};
+ root.onclick=e=>{const rb=e.target.closest('[data-a="reset"]');if(rb){resetTest(rb);return}const t=e.target.closest('[data-c]');if(t){F.c=F.c==t.dataset.c?'':t.dataset.c;sync()}};}
+const tip=document.getElementById('tip');const showTip=e=>{const t=e.target.closest('[data-tip]');if(!t){tip.style.display='none';return}tip.textContent=t.dataset.tip;tip.style.display='block';const x=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8),y=e.clientY+16;tip.style.left=Math.max(4,x)+'px';tip.style.top=(y+tip.offsetHeight>innerHeight?e.clientY-tip.offsetHeight-12:y)+'px'};
+document.addEventListener('pointermove',showTip);document.addEventListener('pointerdown',showTip);
+return{mount:render,dd:DD}})();
+REAS.splice(0,REAS.length,...AN.dd.rs);
+render();
+</script></body></html>
