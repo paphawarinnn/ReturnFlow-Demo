@@ -20,7 +20,7 @@ export function Login() {
           <h2>เลือกมุมมองเพื่อเริ่มใช้งาน</h2>
           <p className="muted">ไม่ต้องใช้รหัสผ่านสำหรับเวอร์ชันทดลอง</p>
           <div className="login-options">
-            <a href="/demo/index.html" className="login-option full-demo-option">
+            <a href={`${import.meta.env.BASE_URL}demo/index.html`} className="login-option full-demo-option">
               <span className="option-icon full"><Icon name="return" size={25} /></span>
               <span><strong>เปิดเดโมนำเสนอแบบเต็ม</strong><small>ครบทุกฟังก์ชันและแดชบอร์ดจาก CSV 15,052 รายการ</small></span>
               <Icon name="arrow" />
